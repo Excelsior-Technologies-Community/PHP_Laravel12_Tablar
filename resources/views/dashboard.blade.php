@@ -12,25 +12,22 @@
 
     <style>
         body {
-            background-color: #0f172a;
-            color: #e2e8f0;
+            background-color: #f8fafc;
+            color: #0f172a;
             font-family: 'Inter', sans-serif;
-        }
-
-        .page-header {
-            margin-bottom: 30px;
+            transition: all 0.3s ease;
         }
 
         .page-title {
-            color: #f8fafc;
+            text-align: center;
             font-weight: bold;
         }
 
         .page-subtitle {
-            color: #94a3b8;
+            text-align: center;
+            color: #64748b;
         }
 
-        /* Metrics Grid */
         .metrics-grid {
             display: flex;
             justify-content: center;
@@ -41,18 +38,18 @@
 
         .metric-card {
             width: 220px;
-            /* medium width */
             border-radius: 16px;
             padding: 25px;
-            color: #fff;
-            position: relative;
+            background: #ffffff;
+            color: #0f172a;
             text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
         .metric-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
         }
 
         .metric-icon {
@@ -63,7 +60,6 @@
             right: 20px;
         }
 
-        /* Recent Users Grid */
         .users-grid {
             display: flex;
             flex-wrap: wrap;
@@ -73,21 +69,18 @@
             margin-bottom: 50px;
         }
 
-        /* User Card Style */
         .user-card {
-            background: #1e293b;
-            /* uniform dark color */
+            background: #ffffff;
             width: 200px;
-            /* medium width */
             border-radius: 12px;
             padding: 25px 15px;
             text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
         }
 
         .user-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
         }
 
         .user-avatar {
@@ -95,28 +88,24 @@
             height: 60px;
             border-radius: 50%;
             margin: 0 auto 15px;
-            background-color: #334155;
+            background-color: #e2e8f0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
             font-weight: bold;
-            color: #fff;
         }
 
         .user-name {
             font-size: 1rem;
             font-weight: 600;
-            margin-bottom: 5px;
         }
 
         .user-role {
-            font-size: 0.875rem;
-            color: #94a3b8;
+            font-size: 0.85rem;
+            color: #64748b;
             margin-bottom: 10px;
         }
 
-        /* Status Badge */
         .badge {
             padding: 5px 12px;
             border-radius: 20px;
@@ -127,109 +116,181 @@
 
         .badge-active {
             background: #22c55e;
-            color: #fff;
+            color: white;
         }
 
         .badge-pending {
             background: #f97316;
-            color: #fff;
+            color: white;
         }
 
         .badge-inactive {
             background: #ef4444;
-            color: #fff;
+            color: white;
+        }
+
+        .dark-mode {
+            background-color: #0b1220 !important;
+            color: #ffffff !important;
+        }
+
+        .dark-mode .metric-card,
+        .dark-mode .user-card {
+            background: #1e293b !important;
+            color: #ffffff !important;
+            box-shadow: none;
+        }
+
+        .dark-mode .user-role {
+            color: #94a3b8;
+        }
+
+        .dark-mode .user-avatar {
+            background: #334155;
+            color: #ffffff;
+        }
+
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: #0f172a;
+            color: #ffffff;
+        }
+
+        .dark-mode .toggle-btn {
+            background: #ffffff;
+            color: #0f172a;
+        }
+
+        /* ⭐ SEARCH BOX */
+        .search-box {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .search-box input {
+            padding: 10px;
+            width: 250px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            outline: none;
         }
     </style>
 </head>
 
-<body class="antialiased border-top-wide border-primary d-flex flex-column">
-    <script src="{{ asset('vendor/tablar/dist/js/tabler.min.js') }}"></script>
+<body>
 
-    <!-- Header -->
-    <div class="page-header d-print-none">
-        <div class="container-xl">
-            <div class="row g-2 align-items-center">
-                <div class="col">
-                    <h2 class="page-title" style="margin-left: 700px;">Dashboard</h2>
-                    <div class="page-subtitle" style="margin-left: 600px;">Welcome to PHP_Laravel12_Tablar Admin</div>
-                </div>
-            </div>
-        </div>
+    <!-- TOGGLE -->
+    <button class="toggle-btn" onclick="toggleTheme()">🌙 Theme</button>
+
+    <!-- HEADER -->
+    <div style="padding: 20px;">
+        <h2 class="page-title">Dashboard</h2>
+        <p class="page-subtitle">Welcome to PHP_Laravel12_Tablar Admin Panel</p>
     </div>
 
     <div class="container-xl">
 
-        <!-- Metrics Cards -->
+        <!-- METRICS -->
         <div class="metrics-grid">
-            <div class="metric-card" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">
+
+            <div class="metric-card" style="background: linear-gradient(135deg, #2563eb, #3b82f6); color:white;">
                 <div class="metric-icon">👥</div>
                 <h3>Users</h3>
-                <h1>125</h1>
-                <p class="text-green">+5% since last week</p>
+                <h1>{{ $stats['users'] }}</h1>
             </div>
 
-            <div class="metric-card" style="background: linear-gradient(135deg, #16a34a, #22c55e);">
-                <div class="metric-icon">💰</div>
-                <h3>Revenue</h3>
-                <h1>$8,250</h1>
-                <p class="text-green">+12% since last week</p>
+            <div class="metric-card" style="background: linear-gradient(135deg, #16a34a, #22c55e); color:white;">
+                <div class="metric-icon">🟢</div>
+                <h3>Active</h3>
+                <h1>{{ $stats['active'] }}</h1>
             </div>
 
-            <div class="metric-card" style="background: linear-gradient(135deg, #ea580c, #f97316);">
-                <div class="metric-icon">📦</div>
-                <h3>Orders</h3>
-                <h1>73</h1>
-                <p class="text-red">-2% since last week</p>
+            <div class="metric-card" style="background: linear-gradient(135deg, #f97316, #ea580c); color:white;">
+                <div class="metric-icon">⏳</div>
+                <h3>Pending</h3>
+                <h1>{{ $stats['pending'] }}</h1>
             </div>
 
-            <div class="metric-card" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
-                <div class="metric-icon">🎫</div>
-                <h3>Tickets</h3>
-                <h1>42</h1>
-                <p class="text-green">+3% since last week</p>
+            <div class="metric-card" style="background: linear-gradient(135deg, #ef4444, #dc2626); color:white;">
+                <div class="metric-icon">❌</div>
+                <h3>Inactive</h3>
+                <h1>{{ $stats['inactive'] }}</h1>
             </div>
+
         </div>
 
-        <!-- Recent Users -->
-        <h3 style="margin-top: 40px; margin-bottom: 20px; margin-left: 700px;">Recent Users</h3>
-        <div class="users-grid">
-            <div class="user-card">
-                <div class="user-avatar">JD</div>
-                <div class="user-name">John Doe</div>
-                <div class="user-role">Admin</div>
-                <span class="badge badge-active">Active</span>
-            </div>
+        <!-- ⭐ SEARCH BOX (ADDED) -->
+        <div class="search-box">
+            <input type="text" id="userSearch" placeholder="Search users...">
+        </div>
 
-            <div class="user-card">
-                <div class="user-avatar">JS</div>
-                <div class="user-name">Jane Smith</div>
-                <div class="user-role">Editor</div>
-                <span class="badge badge-pending">Pending</span>
-            </div>
+        <!-- USERS -->
+        <h3 style="text-align:center; margin-top:40px;">Recent Users</h3>
 
-            <div class="user-card">
-                <div class="user-avatar">MB</div>
-                <div class="user-name">Michael Brown</div>
-                <div class="user-role">User</div>
-                <span class="badge badge-inactive">Inactive</span>
-            </div>
+        <div class="users-grid" id="usersGrid">
 
-            <div class="user-card">
-                <div class="user-avatar">AL</div>
-                <div class="user-name">Alice Lee</div>
-                <div class="user-role">Editor</div>
-                <span class="badge badge-active">Active</span>
-            </div>
+            @foreach($users as $user)
+            <div class="user-card user-item">
 
-            <div class="user-card">
-                <div class="user-avatar">BW</div>
-                <div class="user-name">Bob White</div>
-                <div class="user-role">User</div>
-                <span class="badge badge-active">Active</span>
+                <div class="user-avatar">
+                    {{ strtoupper(substr($user->name, 0, 2)) }}
+                </div>
+
+                <div class="user-name">{{ $user->name }}</div>
+                <div class="user-role">{{ $user->role }}</div>
+
+                <span class="badge
+                @if($user->status == 'active') badge-active
+                @elseif($user->status == 'pending') badge-pending
+                @else badge-inactive
+                @endif
+            ">
+                    {{ ucfirst($user->status) }}
+                </span>
+
             </div>
+            @endforeach
+
         </div>
 
     </div>
+
+    <!-- JS -->
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle("dark-mode");
+
+            localStorage.setItem("theme",
+                document.body.classList.contains("dark-mode") ? "dark" : "light"
+            );
+        }
+
+        window.onload = function() {
+            if (localStorage.getItem("theme") === "dark") {
+                document.body.classList.add("dark-mode");
+            }
+        };
+
+        /* LIVE SEARCH FUNCTIONALITY */
+        document.getElementById("userSearch").addEventListener("keyup", function() {
+            let filter = this.value.toLowerCase();
+            let users = document.querySelectorAll(".user-item");
+
+            users.forEach(function(user) {
+                let text = user.innerText.toLowerCase();
+
+                user.style.display = text.includes(filter) ? "block" : "none";
+            });
+        });
+    </script>
+
 </body>
 
 </html>
