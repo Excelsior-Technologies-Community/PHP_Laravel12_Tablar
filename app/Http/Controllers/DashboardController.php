@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Menu;
 use App\Models\DashboardUser;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $users = DashboardUser::latest()->take(6)->get();
-
-        // Dashboard stats (optional dynamic upgrade)
         $stats = [
             'users' => DashboardUser::count(),
             'active' => DashboardUser::where('status', 'active')->count(),
@@ -19,6 +19,29 @@ class DashboardController extends Controller
             'inactive' => DashboardUser::where('status', 'inactive')->count(),
         ];
 
-        return view('dashboard', compact('users', 'stats'));
+        $totalUsers = User::count();
+        $salesGrowth = 24;
+        $activeSessions = DB::table('sessions')->count();
+
+        $monthlyUsers = User::select(
+            DB::raw('count(id) as count'),
+            DB::raw("DATE_FORMAT(created_at, '%b') as month")
+        )
+        ->groupBy('month')
+        ->orderBy('created_at', 'asc')
+        ->get();
+
+        $chartMonths = $monthlyUsers->pluck('month')->toArray();
+        $chartData = $monthlyUsers->pluck('count')->toArray();
+
+        if (empty($chartData)) {
+            $chartMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'];
+            $chartData = [10, 25, 45, 30, 75, 60, 95];
+        }
+
+        $sidebarMenus = Menu::where('is_active', true)->orderBy('order', 'asc')->get();
+        $users = DashboardUser::latest()->get();
+
+        return view('dashboard', compact('stats', 'users', 'totalUsers', 'salesGrowth', 'activeSessions', 'chartMonths', 'chartData', 'sidebarMenus'));
     }
 }
